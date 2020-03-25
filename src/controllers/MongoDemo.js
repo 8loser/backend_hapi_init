@@ -6,7 +6,7 @@ const fields = 'name type michelin parking delivery deposit review location -_id
 
 /**
  * List
- * 列出所有資料，多參數使用 聯集 (AND)
+ * 列出所有資料，多參數使用 交集 (AND)
  */
 exports.list = (req, h) => {
   // 搜尋條件

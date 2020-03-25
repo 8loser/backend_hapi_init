@@ -9,6 +9,7 @@ const Controller = require('../controllers/MongoDemo');
  */
 const route = [
     {
+        // 交集查詢 http://localhost:port/MongoDemo?參數1=**&參數2=**
         method: 'GET',
         path: '/MongoDemo',
         handler: Controller.list
