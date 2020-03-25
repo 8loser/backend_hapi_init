@@ -1,5 +1,14 @@
 # 後端 Hapi 框架
 
+# TODO
+* 文檔生成 
+```
+await server.register({
+    plugin: require('lout')
+})
+
+```
+
 專案初始化
 ```
 npm init
