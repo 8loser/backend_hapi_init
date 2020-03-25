@@ -14,7 +14,9 @@ exports.list = (req, h) => {
   // 不同條件式
   // 星期幾
   if (req.query.day){
-    // TODO
+    // 列出該日有營業（day!=Closed）的店家
+    const day = req.query.day
+    condition[day] = {$ne:'Closed'}
   }
   // 類型
   if (req.query.type){
@@ -41,7 +43,10 @@ exports.list = (req, h) => {
   if (req.query.location){
     // TODO
   }
+  console.log(condition)
   return Model.find(condition).select(fields).exec().then((demo) => {
+    // 查詢結果比數
+    console.log(demo.length)
     return demo;
   }).catch((err) => {
     return { err: err };
