@@ -9,18 +9,27 @@ const fields = 'name type michelin parking delivery deposit review location -_id
  * 列出所有資料
  */
 exports.list = (req, h) => {
-  return Model.find({}).select(fields).exec().then((demo) => {
-    return demo;
-  }).catch((err) => {
-    return { err: err };
-  });
+  if (JSON.stringify(req.query)=='{}') {
+    // 沒有參數
+    return Model.find().select(fields).exec().then((demo) => {
+        return demo;
+      }).catch((err) => {
+        return { err: err };
+      });
+  } else {
+    // 有參數
+    return Model.find({name: req.query.name}).select(fields).exec().then((demo) => {
+      return demo;
+    }).catch((err) => {
+      return { err: err };
+    });
+  }
 }
 
 /**
  * Get Demo by ID
  */
 exports.get = (req, h) => {
-
   return Model.findById(req.params.id).exec().then((demo) => {
     if (!demo) return { message: 'Demo not Found' };
     return { demos: demo };
