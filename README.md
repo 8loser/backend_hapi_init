@@ -1,2 +1,9 @@
-# backend_hapi_init
-backend_hapi_init
+# 專案初始化
+```
+npm init
+```
+
+# 安裝 hapi
+```
+npm install @hapi/hapi
+```

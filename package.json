@@ -1,0 +1,22 @@
+{
+  "name": "backend_hapi_init",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/8loser/backend_hapi_init.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/8loser/backend_hapi_init/issues"
+  },
+  "homepage": "https://github.com/8loser/backend_hapi_init#readme",
+  "dependencies": {
+    "@hapi/hapi": "^19.1.1"
+  }
+}
