@@ -14,6 +14,10 @@ const route = [
         handler: Controller.list
     }, {
         method: 'GET',
+        path: '/MongoDemoGreed',
+        handler: Controller.list
+    }, {
+        method: 'GET',
         path: '/MongoDemo/{id}',
         handler: Controller.get
     }, {

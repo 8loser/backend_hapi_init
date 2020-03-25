@@ -6,24 +6,46 @@ const fields = 'name type michelin parking delivery deposit review location -_id
 
 /**
  * List
- * 列出所有資料
+ * 列出所有資料，多參數使用 聯集 (AND)
  */
 exports.list = (req, h) => {
-  if (JSON.stringify(req.query)=='{}') {
-    // 沒有參數
-    return Model.find().select(fields).exec().then((demo) => {
-        return demo;
-      }).catch((err) => {
-        return { err: err };
-      });
-  } else {
-    // 有參數
-    return Model.find({name: req.query.name}).select(fields).exec().then((demo) => {
-      return demo;
-    }).catch((err) => {
-      return { err: err };
-    });
+  // 搜尋條件
+  var condition = {}
+  // 不同條件式
+  // 星期幾
+  if (req.query.day){
+    // TODO
   }
+  // 類型
+  if (req.query.type){
+    condition['type'] = req.query.type
+  }
+  // 米其林
+  if (req.query.michelin){
+    // 須要轉成數值不然查詢不到資料
+    condition['michelin']= Number(req.query.michelin)
+  }
+  // 停車
+  if (req.query.parking){
+    condition['parking']= req.query.parking
+  }
+  // 外送
+  if (req.query.delivery){
+    condition['delivery']= req.query.delivery
+  }
+  // 先繳訂金
+  if (req.query.deposit){
+    condition['deposit']= req.query.deposit
+  }
+  // 地理位置
+  if (req.query.location){
+    // TODO
+  }
+  return Model.find(condition).select(fields).exec().then((demo) => {
+    return demo;
+  }).catch((err) => {
+    return { err: err };
+  });
 }
 
 /**
