@@ -6,7 +6,8 @@ const fields = 'name type michelin parking delivery deposit review location -_id
 
 /**
  * List
- * 列出所有資料，多參數使用 交集 (AND)
+ * 查詢資料，多參數使用 交集 (AND)
+ * 如果 greed=true，使用聯集 (OR)
  */
 exports.list = (req, h) => {
   // 搜尋條件
@@ -57,6 +58,18 @@ exports.list = (req, h) => {
       }
     }
   }
+
+  // 如果greed=true，使用聯集搜尋
+  if (req.query.greed) {
+    var greedArray = Object.keys(condition).map(function (key) {
+      var obj = {}
+      obj[key] = condition[key]
+      return obj
+    });
+    condition = { $or: greedArray }
+  }
+
+  // 查詢Mongodb
   return Model.find(condition).select(fields).exec().then((demo) => {
     return demo;
   }).catch((err) => {
