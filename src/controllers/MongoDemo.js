@@ -13,40 +13,51 @@ exports.list = (req, h) => {
   var condition = {}
   // 不同條件式
   // 星期幾
-  if (req.query.day){
+  if (req.query.day) {
     // 列出該日有營業（day!=Closed）的店家
     const day = req.query.day
-    condition[day] = {$ne:'Closed'}
+    condition[day] = { $ne: 'Closed' }
   }
   // 類型
-  if (req.query.type){
+  if (req.query.type) {
     condition['type'] = req.query.type
   }
   // 米其林
-  if (req.query.michelin){
+  if (req.query.michelin) {
     // 須要轉成數值不然查詢不到資料
-    condition['michelin']= Number(req.query.michelin)
+    condition['michelin'] = Number(req.query.michelin)
   }
   // 停車
-  if (req.query.parking){
-    condition['parking']= req.query.parking
+  if (req.query.parking) {
+    condition['parking'] = req.query.parking
   }
   // 外送
-  if (req.query.delivery){
-    condition['delivery']= req.query.delivery
+  if (req.query.delivery) {
+    condition['delivery'] = req.query.delivery
   }
   // 先繳訂金
-  if (req.query.deposit){
-    condition['deposit']= req.query.deposit
+  if (req.query.deposit) {
+    condition['deposit'] = req.query.deposit
   }
   // 地理位置
-  if (req.query.location){
-    // TODO
+  if (req.query.longitude || req.query.latitude) {
+    condition = {
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [
+              req.query.longitude, //longitude: -180~180
+              req.query.latitude   //latitude: -90~90
+            ]
+          },
+          $minDistance: 0,
+          $maxDistance: 5000
+        }
+      }
+    }
   }
-  console.log(condition)
   return Model.find(condition).select(fields).exec().then((demo) => {
-    // 查詢結果比數
-    console.log(demo.length)
     return demo;
   }).catch((err) => {
     return { err: err };
