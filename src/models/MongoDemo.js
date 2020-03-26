@@ -14,4 +14,4 @@ const Model = new Schema({
 Model.plugin(mongoosePaginate);
 
 // module.exports = mongoose.model('Demo', Model, Collection名稱); 
-module.exports = mongoose.model('Demo', Model, 'food'); 
+module.exports = mongoose.model('Demo', Model, 'restaurant'); 

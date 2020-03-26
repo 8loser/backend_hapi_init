@@ -54,3 +54,16 @@ npm install mongoose-paginate
 * Node.js+MongoDB对于RestfulApi中用户token认证的实践  
   https://cnodejs.org/topic/58c1477b06dbd608756d0bca
 
+
+# MongoDB設置
+
+## 設定GEO index
+db.restaurant.createIndex({location:"2dsphere"});
+## 日期營業時間轉為open, close
+"(\d+:\d+)-(\d+:\d+)"
+"(\d+)-(\d+:\d+)"
+"(\d+) - (\d+:\d+)"
+{"open":"$1","close":"$2"}
+## 地點轉為經度、緯度兩個欄位
+"location": "POINT \(([+-]?\d+\.\d+) ([+-]?\d+\.\d+)\)"
+"location" : {"type" : "Point","coordinates" : [$1,$2]}

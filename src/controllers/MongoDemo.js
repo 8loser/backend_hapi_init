@@ -15,6 +15,21 @@ exports.list = (req, h) => {
     // 列出該日有營業（day!=Closed）的店家
     const day = req.query.day
     condition[day] = { $ne: 'Closed' }
+    // 如果有open、clsoe時間參數，加上時間條件
+    // 開業時間
+    if (req.query.open){
+      condition[day+'.open'] = { $lte: req.query.open }
+    }
+    // 歇業時間
+    if (req.query.close){
+      // 歇業時間如果跨日，要特別處理
+      if (req.query.close>req.query.open){
+        condition[day+'.close'] = { $gte: req.query.close }
+      } else {
+        // 跨日
+        condition[day+'.close'] = { $lte: req.query.close }
+      }
+    }
   }
   // 類型
   if (req.query.type) {
@@ -50,7 +65,7 @@ exports.list = (req, h) => {
             ]
           },
           $minDistance: 0,
-          $maxDistance: 5000
+          $maxDistance: 100000
         }
       }
     }
@@ -71,6 +86,7 @@ exports.list = (req, h) => {
     // 要顯示跟隱藏的欄位
     select: '-_id name mon tue wed thu fri sat sun delivery deposit michelin parking review location',
     // sort: { date: -1 },
+    // lean:true,
     limit: Number(req.query.limit)||10,
     page: Number(req.query.page)||1
   };
