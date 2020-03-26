@@ -6,8 +6,9 @@
 await server.register({
     plugin: require('lout')
 })
-
 ```
+* 分頁功能
+https://www.jishuwen.com/d/2o08/zh-tw
 
 專案初始化
 ```
@@ -33,6 +34,11 @@ npm install mongoose
 
 ```
 npm install supervisor -g
+```
+
+安裝分頁元件
+```
+npm install mongoose-paginate
 ```
 
 # Hapi 參考網站

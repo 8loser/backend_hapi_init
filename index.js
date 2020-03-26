@@ -22,8 +22,9 @@ const init = async () => {
 
     server.route(routes);
 
+    // 啟動服務
     await server.start();
-    // Once started, connect to Mongo through Mongoose
+    // 連接mongo資料庫
     const mongoOptions = {
         useNewUrlParser: true,
         useCreateIndex: true,

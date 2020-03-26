@@ -1,9 +1,6 @@
 
 var Model = require('../models/MongoDemo');
 
-// 要顯示跟隱藏的欄位
-const fields = 'name type michelin parking delivery deposit review location -_id'
-
 /**
  * List
  * 查詢資料，多參數使用 交集 (AND)
@@ -69,12 +66,30 @@ exports.list = (req, h) => {
     condition = { $or: greedArray }
   }
 
-  // 查詢Mongodb
-  return Model.find(condition).select(fields).exec().then((demo) => {
-    return demo;
-  }).catch((err) => {
-    return { err: err };
+  // 分頁參數設定
+  var paginOptions = {
+    // 要顯示跟隱藏的欄位
+    select: '-_id name mon tue wed thu fri sat sun delivery deposit michelin parking review location',
+    // sort: { date: -1 },
+    limit: Number(req.query.limit)||10,
+    page: Number(req.query.page)||1
+  };
+
+  // 使用分頁查詢查詢Mongodb
+  return Model.paginate(condition, paginOptions, function(err, result) {
+    return result
+  }).catch((err)=>{
+    return { err: err };  
   });
+
+  // 查詢Mongodb
+  // 要顯示跟隱藏的欄位
+  // const fields = 'name type michelin parking delivery deposit review location -_id'
+  // return Model.find(condition).select(fields).exec().then((demo) => {
+  //   return demo;
+  // }).catch((err) => {
+  //   return { err: err };
+  // });
 }
 
 /**
