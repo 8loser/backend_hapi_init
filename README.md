@@ -58,7 +58,7 @@ npm install mongoose-paginate
 # MongoDB設置
 
 ## 設定GEO index
-db.restaurant.createIndex({location:"2dsphere"});
+db.restaurant.createIndex({collection名稱:"2dsphere"});
 ## 日期營業時間轉為open, close
 "(\d+:\d+)-(\d+:\d+)"
 "(\d+)-(\d+:\d+)"
