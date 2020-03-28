@@ -1,11 +1,54 @@
 
 const { demo } = require('../utility/sequelize')
-
+const Sequelize = require('sequelize')
 /**
  * List
  */
 exports.list = (req, h) => {
-  return demo.findAll()
+
+  // 搜尋條件
+  var condition = {}
+
+  // 類型
+  if (req.query.type) {
+    condition['type'] = req.query.type
+  }
+  // 米其林
+  if (req.query.michelin) {
+    // 如果是數值，須要轉成數值不然查詢不到資料
+    condition['michelin'] = req.query.michelin
+  }
+  // 停車
+  if (req.query.parking) {
+    condition['parking'] = req.query.parking
+  }
+  // 外送
+  if (req.query.delivery) {
+    condition['delivery'] = req.query.delivery
+  }
+  // 先繳訂金
+  if (req.query.deposit) {
+    condition['deposit'] = req.query.deposit
+  }
+
+  // TODO 星期幾、地理位置
+
+  // 如果greed=true，使用聯集搜尋
+  if (req.query.greed) {
+    const Op = Sequelize.Op;
+    var greedArray = Object.keys(condition).map(function (key) {
+      var obj = {}
+      obj[key] = condition[key]
+      return obj
+    });
+    condition = { [Op.or]: greedArray }
+  }
+
+  return demo.findAll({ where: condition }).then(demo => {
+    return demo
+  }).catch(err => {
+    return { err: err }
+  })
 }
 
 /**

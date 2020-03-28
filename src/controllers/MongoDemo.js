@@ -37,8 +37,8 @@ exports.list = (req, h) => {
   }
   // 米其林
   if (req.query.michelin) {
-    // 須要轉成數值不然查詢不到資料
-    condition['michelin'] = Number(req.query.michelin)
+    // 如果是數值，須要轉成數值不然查詢不到資料
+    condition['michelin'] = parseInt(req.query.michelin)||req.query.michelin
   }
   // 停車
   if (req.query.parking) {
