@@ -1,15 +1,11 @@
 
-var Model = require('../models/MongoDemo');
-
-const { User } = require('../utility/sequelize')
+const { demo } = require('../utility/sequelize')
 
 /**
  * List
  */
 exports.list = (req, h) => {
-  return User.findAll({
-    attributes: ['name']
-  })
+  return demo.findAll()
 }
 
 /**
