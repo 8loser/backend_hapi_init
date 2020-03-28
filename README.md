@@ -30,6 +30,12 @@ npm install dotenv
 npm install mongoose
 ```
 
+安裝 mariadb 套件
+```
+npm install mariadb
+npm install sequelize
+```
+
 安裝 supervisor 偵測 js 變更自動重啟
 
 ```

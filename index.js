@@ -8,7 +8,7 @@ require('dotenv').config()
 // 使用MongoDB資料庫
 // 資料庫位址
 const mongoose = require('mongoose');
-const MongoDBUrl = process.env.DBUrl;
+const MongoDBUrl = process.env.MongoDBUrl;
 
 //路徑讀取routes內檔案
 const routes = require('./src/routes');
