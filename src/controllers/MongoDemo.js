@@ -16,6 +16,7 @@ exports.list = (req, h) => {
     const day = req.query.day
     condition[day] = { $ne: 'Closed' }
     // 如果有open、clsoe時間參數，加上時間條件
+    // TODO 這裡有bug
     // 開業時間
     if (req.query.open){
       condition[day+'.open'] = { $lte: req.query.open }

@@ -5,7 +5,8 @@
 // 載入全域設定檔 .env
 require('dotenv').config()
 const Sequelize = require('sequelize')
-const demoModel = require('../models/MariaDemo')
+const ModelRestaurant = require('../models/MariaDemo_restaurant')
+const ModelBussinessHours = require('../models/MariaDemo_bussiness_hours')
 
 const sequelize = new Sequelize(process.env.MariadbDatabase, process.env.MariadbUser, process.env.MariadbPassword, {
   host: process.env.MariadbHost,
@@ -30,8 +31,8 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', err);
   });
 
-const demo = demoModel(sequelize, Sequelize)
-
+const Restaurant = ModelRestaurant(sequelize, Sequelize)
+const BussinessHours = ModelBussinessHours(sequelize, Sequelize)
 module.exports = {
-  demo
+  Restaurant, BussinessHours
 }

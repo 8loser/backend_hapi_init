@@ -1,6 +1,8 @@
 
-const { demo } = require('../utility/sequelize')
+const { Restaurant, BussinessHours } = require('../utility/sequelize')
 const Sequelize = require('sequelize')
+const Op = Sequelize.Op;
+
 /**
  * List
  */
@@ -8,7 +10,32 @@ exports.list = (req, h) => {
 
   // 搜尋條件
   var condition = {}
+  // 營業時間條件
+  var bussinessHoursCondition = {}
 
+  // 星期幾
+  if (req.query.day) {
+    // 列出該日有營業（day!=Closed）的店家
+    const day = req.query.day
+    bussinessHoursCondition[day+'_open'] = { [Op.ne]: null }
+    // 如果有open、clsoe時間參數，加上時間條件
+    // 開業時間
+    if (req.query.open){
+      bussinessHoursCondition[day+'_open'] = { [Op.lte]: req.query.open }
+    }
+    // 歇業時間
+    if (req.query.close){
+      // 歇業時間如果跨日，要特別處理
+      // TODO 這裡有bug
+      // 開業時間
+      if (req.query.close>req.query.open){
+        bussinessHoursCondition[day+'_close'] = { [Op.gte]: req.query.close }
+      } else {
+        // 跨日
+        bussinessHoursCondition[day+'_close'] = { [Op.lte]: req.query.close }
+      }
+    }
+  }
   // 類型
   if (req.query.type) {
     condition['type'] = req.query.type
@@ -35,7 +62,6 @@ exports.list = (req, h) => {
 
   // 如果greed=true，使用聯集搜尋
   if (req.query.greed) {
-    const Op = Sequelize.Op;
     var greedArray = Object.keys(condition).map(function (key) {
       var obj = {}
       obj[key] = condition[key]
@@ -53,12 +79,21 @@ exports.list = (req, h) => {
   // 偏移
   var offset = 0
   if (req.query.page) {
-    offset = (Number(req.query.page)-1) * limit
+    offset = (Number(req.query.page) - 1) * limit
   }
 
+  Restaurant.hasOne(BussinessHours, { foreignKey: 'id' })
   // 執行查詢
-  return demo.findAndCountAll({ where: condition, offset: offset, limit: limit }).then(demo => {
-    return demo
+  // return Restaurant.findAndCountAll({ where: condition, offset: offset, limit: limit, include:[BussinessHours] }).then(Restaurant => {
+  return Restaurant.findAndCountAll({
+    // where: condition,
+    offset: offset, limit: limit,
+    include: {
+      model: BussinessHours,
+      where: bussinessHoursCondition
+    }
+  }).then(Restaurant => {
+    return Restaurant
   }).catch(err => {
     return { err: err }
   })
