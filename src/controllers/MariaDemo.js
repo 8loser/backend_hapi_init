@@ -44,7 +44,20 @@ exports.list = (req, h) => {
     condition = { [Op.or]: greedArray }
   }
 
-  return demo.findAll({ where: condition }).then(demo => {
+  // pagin功能
+  // 每頁資料筆數
+  var limit = 10
+  if (req.query.limit) {
+    limit = Number(req.query.limit)
+  }
+  // 偏移
+  var offset = 0
+  if (req.query.page) {
+    offset = (Number(req.query.page)-1) * limit
+  }
+
+  // 執行查詢
+  return demo.findAndCountAll({ where: condition, offset: offset, limit: limit }).then(demo => {
     return demo
   }).catch(err => {
     return { err: err }
