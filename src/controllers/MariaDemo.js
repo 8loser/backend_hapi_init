@@ -70,7 +70,7 @@ exports.list = (req, h) => {
   // 地理位置
   // TODO 跟greed一起的話會有bug
   var attributes = Object.keys(Restaurant.rawAttributes);
-  if (req.query.longitude || req.query.latitude) {
+  if (req.query.longitude && req.query.latitude) {
     const location = Sequelize.literal(`ST_GeomFromText('POINT(`+ req.query.longitude +` `+ req.query.latitude +`)')`)
     const distance = Sequelize.fn('ST_Distance', Sequelize.literal('location'), location)    
     attributes.push([distance,'distance']);
