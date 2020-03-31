@@ -14,6 +14,6 @@ module.exports = (sequelize, type) => {
       delivery: type.STRING,
       deposit: type.STRING,
       review: type.DOUBLE,
-      location: type.STRING
+      location: type.GEOMETRY
   })
 }

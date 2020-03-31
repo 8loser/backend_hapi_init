@@ -57,9 +57,6 @@ exports.list = (req, h) => {
   if (req.query.deposit) {
     condition['deposit'] = req.query.deposit
   }
-
-  // TODO 星期幾、地理位置
-
   // 如果greed=true，使用聯集搜尋
   if (req.query.greed) {
     var greedArray = Object.keys(condition).map(function (key) {
@@ -68,6 +65,16 @@ exports.list = (req, h) => {
       return obj
     });
     condition = { [Op.or]: greedArray }
+  }
+
+  // 地理位置
+  // TODO 跟greed一起的話會有bug
+  var attributes = Object.keys(Restaurant.rawAttributes);
+  if (req.query.longitude || req.query.latitude) {
+    const location = Sequelize.literal(`ST_GeomFromText('POINT(`+ req.query.longitude +` `+ req.query.latitude +`)')`)
+    const distance = Sequelize.fn('ST_Distance', Sequelize.literal('location'), location)    
+    attributes.push([distance,'distance']);
+    condition = { [Op.and]: [condition, Sequelize.where(distance, { [Op.lte]: 10 })] }
   }
 
   // pagin功能
@@ -87,6 +94,8 @@ exports.list = (req, h) => {
   // 執行查詢
   return Restaurant.findAndCountAll({
     where: condition,
+    // attributes: [[Sequelize.fn('ST_Distance', Sequelize.literal('location'), location),'distance']],
+    attributes: attributes,
     // 分頁參數
     offset: offset, limit: limit,
     include: {
