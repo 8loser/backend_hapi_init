@@ -19,6 +19,6 @@ module.exports = (sequelize, type) => {
       fri_open: type.STRING,
       fri_close: type.STRING,
       sat_open: type.STRING,
-      sat_close: type.STRING
+      sat_close: type.GEOMETRY
   })
 }

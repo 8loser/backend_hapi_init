@@ -82,11 +82,12 @@ exports.list = (req, h) => {
     offset = (Number(req.query.page) - 1) * limit
   }
 
+  // 關聯營業時間表(Bussiness_hours)
   Restaurant.hasOne(BussinessHours, { foreignKey: 'id' })
   // 執行查詢
-  // return Restaurant.findAndCountAll({ where: condition, offset: offset, limit: limit, include:[BussinessHours] }).then(Restaurant => {
   return Restaurant.findAndCountAll({
-    // where: condition,
+    where: condition,
+    // 分頁參數
     offset: offset, limit: limit,
     include: {
       model: BussinessHours,
